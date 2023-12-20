@@ -2,13 +2,13 @@ import express from "express"
 import routes from "./routes"
 
 class App {
-    constructor() {
+    constructor () {
         this.app = express()
 
         this.middleware()
         this.routes()
     }
-    middleware() {
+    middleware () {
         this.app.use(express.json())
     }
     routes() {
