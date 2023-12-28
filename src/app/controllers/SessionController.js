@@ -12,7 +12,7 @@ class SessionController {
         })
 
         const checkValidPasswordorEmail = () => {
-            return response.status(400).json({ messege: 'make sure your email or password' })
+            return response.status(401).json({ messege: 'make sure your email or password' })
         }
 
         if (!(await schema.isValid(request.body))) checkValidPasswordorEmail()
