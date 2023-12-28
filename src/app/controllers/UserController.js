@@ -9,23 +9,39 @@ class UserController {
         const schema = Yup.object().shape({
             name: Yup.string().required(),
             email: Yup.string().email().required(),
-            password_hash: Yup.string().required().min(6),
+            password: Yup.string().required().min(6),
             admin: Yup.boolean(),
         })
-        // Validate request body against the schema
-        if (!(await schema.isValid(request.body))) {
-            return response.status(400).json({ error: "make sure your data is correct" })
+        // // Validate request body against the schema
+        // if (!(await schema.isValid(request.body))) {
+        //     return response.status(400).json({ error: "make sure your data is correct" })
+        // }
+
+        try {
+            await schema.validateSync(request.body, { abortEarly: false })
+        } catch (err) {
+            return response.status(400).json({ error: err.erros })
         }
+        
+        const { name, email, password, admin } = request.body 
+        
+        const userExists = await User.findOne({
+            where: { email },
+        })
+
+        if (userExists) {
+            return response.status(400).json({ error: "existe" })
+        }
+        console.log(userExists)
 
         // Destructure relevant fields from the request body
-        const { name, email, password_hash, admin } = request.body
 
         // Create a new user using the User model
         const user = await User.create({
             id: v4(), // Generate a UUID for the user
             name,
             email,
-            password_hash,
+            password,
             admin,
         })
         // Return a JSON response with the user details
