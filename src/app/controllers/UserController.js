@@ -12,11 +12,7 @@ class UserController {
             password: Yup.string().required().min(6),
             admin: Yup.boolean(),
         })
-        // // Validate request body against the schema
-        // if (!(await schema.isValid(request.body))) {
-        //     return response.status(400).json({ error: "make sure your data is correct" })
-        // }
-
+        
         try {
             await schema.validateSync(request.body, { abortEarly: false })
         } catch (err) {
